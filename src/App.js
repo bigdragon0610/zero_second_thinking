@@ -1,24 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { createContext, useState } from "react";
+import BrowseScreen from "./components/BrowseScreen";
+import Textarea from "./components/Textarea";
+
+export const ContentContext = createContext();
 
 function App() {
+  const [content, setContent] = useState("");
+  const [canEditContent, setCanEditContent] = useState(true);
+  const value = {
+    content,
+    setContent,
+    canEditContent,
+    setCanEditContent,
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ContentContext.Provider value={value}>
+      {canEditContent ? <Textarea /> : <BrowseScreen />}
+    </ContentContext.Provider>
   );
 }
 

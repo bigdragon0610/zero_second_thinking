@@ -12,7 +12,6 @@ const BrowseScreen = () => {
       <Button
         variant='contained'
         sx={{ mt: 2, ml: "auto", display: "block" }}
-        q
         onClick={() => setCanEditContent(true)}
       >
         edit

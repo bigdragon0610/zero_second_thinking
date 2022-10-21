@@ -5,7 +5,12 @@ import Textarea from "./components/Textarea";
 export const ContentContext = createContext();
 
 function App() {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState({
+    id: "",
+    title: "",
+    text: "",
+    created_at: "",
+  });
   const [canEditContent, setCanEditContent] = useState(true);
   const value = {
     content,

@@ -1,4 +1,4 @@
-import { Button, Container, Paper } from "@mui/material";
+import { Button, CardHeader, Container, Paper } from "@mui/material";
 import { useContext } from "react";
 import { ContentContext } from "../App";
 
@@ -6,8 +6,9 @@ const BrowseScreen = () => {
   const { content, setCanEditContent } = useContext(ContentContext);
   return (
     <Container maxWidth='md' sx={{ py: 2 }}>
+      <CardHeader title={content.title}></CardHeader>
       <Paper variant='outlined' sx={{ whiteSpace: "pre-wrap", p: 2 }} square>
-        {content}
+        {content.text}
       </Paper>
       <Button
         variant='contained'

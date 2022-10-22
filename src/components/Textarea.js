@@ -1,20 +1,28 @@
 import { Button, Container, Input, TextField } from "@mui/material";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useContext, useRef } from "react";
-import { ContentContext } from "../App";
+import { ContentContext, UserContext } from "../App";
 import { db } from "../firebase/firebase-config";
 
 const Textarea = () => {
   const { content, setContent, setCanEditContent } = useContext(ContentContext);
+  const { uid, signIn } = useContext(UserContext);
+
   const titleRef = useRef();
   const textRef = useRef();
+
   const onSubmit = () => {
+    if (!uid) {
+      alert("ログインして下さい");
+      signIn();
+      return;
+    }
+    setCanEditContent(false);
     if (content.id) {
       updateContent(content.id, titleRef.current.value, textRef.current.value);
     } else {
       createContent(titleRef.current.value, textRef.current.value);
     }
-    setCanEditContent(false);
   };
 
   const createContent = async (title, text) => {
@@ -22,6 +30,7 @@ const Textarea = () => {
     const docRef = await addDoc(collection(db, "contents"), {
       title: title,
       text: text,
+      uid: uid,
       updated_at: updated_at,
     });
     setContent({
@@ -37,6 +46,7 @@ const Textarea = () => {
     await setDoc(doc(db, "contents", id), {
       title: title,
       text: text,
+      uid: uid,
       updated_at: updated_at,
     });
     setContent({

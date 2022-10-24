@@ -8,7 +8,6 @@ const Textarea = () => {
   const { content, setContent, setCanEditContent } = useContext(ContentContext);
   const { uid, signIn } = useContext(UserContext);
 
-  const titleRef = useRef();
   const textRef = useRef();
 
   const onSubmit = () => {
@@ -19,9 +18,9 @@ const Textarea = () => {
     }
     setCanEditContent(false);
     if (content.id) {
-      updateContent(content.id, titleRef.current.value, textRef.current.value);
+      updateContent(content.id, content.title, textRef.current.value);
     } else {
-      createContent(titleRef.current.value, textRef.current.value);
+      createContent(content.title, textRef.current.value);
     }
   };
 
@@ -57,13 +56,17 @@ const Textarea = () => {
     });
   };
 
+  const onTitleChange = (e) => {
+    setContent((prev) => ({ ...prev, title: e.target.value }));
+  };
+
   return (
     <Container component='form' maxWidth='md' sx={{ py: 2 }}>
       <Input
         sx={{ mb: 3, width: "50%" }}
+        value={content.title}
+        onChange={onTitleChange}
         placeholder='title'
-        inputRef={titleRef}
-        defaultValue={content.title}
       />
       <TextField
         multiline

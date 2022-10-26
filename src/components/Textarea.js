@@ -1,14 +1,14 @@
-import { Button, Container, Input, TextField } from "@mui/material";
+import { Box, Button, Container, Input, TextField } from "@mui/material";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useContext, useRef } from "react";
 import { ContentContext, UserContext } from "../App";
 import { db } from "../firebase/firebase-config";
 
 const Textarea = () => {
-  const { content, setContent, setCanEditContent } = useContext(ContentContext);
+  const { content, setContent, setCanEditContent, prevContent } =
+    useContext(ContentContext);
   const { uid, signIn } = useContext(UserContext);
 
-  const titleRef = useRef();
   const textRef = useRef();
 
   const onSubmit = () => {
@@ -18,10 +18,10 @@ const Textarea = () => {
       return;
     }
     setCanEditContent(false);
-    if (content.id) {
-      updateContent(content.id, titleRef.current.value, textRef.current.value);
+    if (!content.id) {
+      createContent(content.title, textRef.current.value);
     } else {
-      createContent(titleRef.current.value, textRef.current.value);
+      updateContent(content.id, content.title, textRef.current.value);
     }
   };
 
@@ -41,6 +41,11 @@ const Textarea = () => {
     });
   };
 
+  const cancelEditing = () => {
+    setCanEditContent(false);
+    setContent({ ...prevContent });
+  };
+
   const updateContent = async (id, title, text) => {
     const updated_at = new Date();
     await setDoc(doc(db, "contents", id), {
@@ -57,13 +62,17 @@ const Textarea = () => {
     });
   };
 
+  const onTitleChange = (e) => {
+    setContent((prev) => ({ ...prev, title: e.target.value }));
+  };
+
   return (
-    <Container component='form' maxWidth='md' sx={{ py: 2 }}>
+    <Container component='form' maxWidth='md' sx={{ py: 3 }}>
       <Input
         sx={{ mb: 3, width: "50%" }}
+        value={content.title}
+        onChange={onTitleChange}
         placeholder='title'
-        inputRef={titleRef}
-        defaultValue={content.title}
       />
       <TextField
         multiline
@@ -72,13 +81,18 @@ const Textarea = () => {
         defaultValue={content.text}
         placeholder='text'
       />
-      <Button
-        variant='contained'
-        sx={{ mt: 2, ml: "auto", display: "block" }}
-        onClick={onSubmit}
-      >
-        send
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "end", gap: 2, mt: 2 }}>
+        <Button variant='contained' onClick={cancelEditing}>
+          cancel
+        </Button>
+        <Button
+          variant='contained'
+          onClick={onSubmit}
+          disabled={!content.title}
+        >
+          send
+        </Button>
+      </Box>
     </Container>
   );
 };

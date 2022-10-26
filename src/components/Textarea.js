@@ -1,11 +1,12 @@
-import { Button, Container, Input, TextField } from "@mui/material";
+import { Box, Button, Container, Input, TextField } from "@mui/material";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useContext, useRef } from "react";
 import { ContentContext, UserContext } from "../App";
 import { db } from "../firebase/firebase-config";
 
 const Textarea = () => {
-  const { content, setContent, setCanEditContent } = useContext(ContentContext);
+  const { content, setContent, setCanEditContent, prevContent } =
+    useContext(ContentContext);
   const { uid, signIn } = useContext(UserContext);
 
   const textRef = useRef();
@@ -17,10 +18,10 @@ const Textarea = () => {
       return;
     }
     setCanEditContent(false);
-    if (content.id) {
-      updateContent(content.id, content.title, textRef.current.value);
-    } else {
+    if (!content.id) {
       createContent(content.title, textRef.current.value);
+    } else {
+      updateContent(content.id, content.title, textRef.current.value);
     }
   };
 
@@ -38,6 +39,11 @@ const Textarea = () => {
       text: text,
       updated_at: updated_at,
     });
+  };
+
+  const cancelEditing = () => {
+    setCanEditContent(false);
+    setContent({ ...prevContent });
   };
 
   const updateContent = async (id, title, text) => {
@@ -61,7 +67,7 @@ const Textarea = () => {
   };
 
   return (
-    <Container component='form' maxWidth='md' sx={{ py: 2 }}>
+    <Container component='form' maxWidth='md' sx={{ py: 3 }}>
       <Input
         sx={{ mb: 3, width: "50%" }}
         value={content.title}
@@ -75,13 +81,18 @@ const Textarea = () => {
         defaultValue={content.text}
         placeholder='text'
       />
-      <Button
-        variant='contained'
-        sx={{ mt: 2, ml: "auto", display: "block" }}
-        onClick={onSubmit}
-      >
-        send
-      </Button>
+      <Box sx={{ display: "flex", justifyContent: "end", gap: 2, mt: 2 }}>
+        <Button variant='contained' onClick={cancelEditing}>
+          cancel
+        </Button>
+        <Button
+          variant='contained'
+          onClick={onSubmit}
+          disabled={!content.title}
+        >
+          send
+        </Button>
+      </Box>
     </Container>
   );
 };

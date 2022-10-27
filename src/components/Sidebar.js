@@ -6,7 +6,7 @@ import {
   List,
   ListItemButton,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { ContentContext } from "../App";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
@@ -37,6 +37,7 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
         setContents([...fetchedContents]);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const showOldContent = (content) => {

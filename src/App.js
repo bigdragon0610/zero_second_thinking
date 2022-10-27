@@ -1,9 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import BrowseScreen from "./components/BrowseScreen";
 import Textarea from "./components/Textarea";
 import {
+  // eslint-disable-next-line
   Auth,
   getAuth,
+  // eslint-disable-next-line
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,

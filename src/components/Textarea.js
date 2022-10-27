@@ -21,23 +21,23 @@ const Textarea = () => {
     if (!content.id) {
       createContent(content.title, textRef.current.value);
     } else {
-      updateContent(content.id, content.title, textRef.current.value);
+      updateContent(content, textRef.current.value);
     }
   };
 
   const createContent = async (title, text) => {
-    const updated_at = new Date();
+    const created_at = new Date();
     const docRef = await addDoc(collection(db, "contents"), {
       title: title,
       text: text,
       uid: uid,
-      updated_at: updated_at,
+      created_at: created_at,
     });
     setContent({
       id: docRef.id,
       title: title,
       text: text,
-      updated_at: updated_at,
+      created_at: created_at,
     });
   };
 
@@ -46,20 +46,14 @@ const Textarea = () => {
     setContent({ ...prevContent });
   };
 
-  const updateContent = async (id, title, text) => {
-    const updated_at = new Date();
-    await setDoc(doc(db, "contents", id), {
-      title: title,
+  const updateContent = async (content, text) => {
+    await setDoc(doc(db, "contents", content.id), {
+      title: content.title,
       text: text,
       uid: uid,
-      updated_at: updated_at,
+      created_at: content.created_at,
     });
-    setContent({
-      id: id,
-      title: title,
-      text: text,
-      updated_at: updated_at,
-    });
+    setContent({ ...content, text: text });
   };
 
   const onTitleChange = (e) => {

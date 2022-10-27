@@ -41,7 +41,9 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
           ...doc.data(),
         });
       });
-      setContents([...fetchedContents]);
+      if (fetchedContents.length) {
+        setContents([...fetchedContents]);
+      }
     });
   }, []);
 

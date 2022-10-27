@@ -6,30 +6,44 @@ import {
   List,
   ListItemButton,
 } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ContentContext } from "../App";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import { db } from "../firebase/firebase-config";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
   const { setContent, canEditContent } = useContext(ContentContext);
 
-  const contents = [
+  const [contents, setContents] = useState([
     {
-      id: "test",
-      title: "test",
-      text: "test content\ntest",
+      id: "",
+      title: "",
+      text: "",
+      created_at: "",
     },
-    {
-      id: "test2",
-      title: "test2",
-      text: "test2 content\ntest2",
-    },
-    {
-      id: "test3",
-      title: "test3",
-      text: "test3 content\ntest3",
-    },
-  ];
+  ]);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, async (user) => {
+      const q = query(
+        collection(db, "contents"),
+        where("uid", "==", user.uid),
+        orderBy("created_at", "desc")
+      );
+      const querySnapshot = await getDocs(q);
+      const fetchedContents = [];
+      querySnapshot.forEach((doc) => {
+        fetchedContents.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      setContents([...fetchedContents]);
+    });
+  }, []);
 
   const showOldContent = (content) => {
     setContent({ ...content });

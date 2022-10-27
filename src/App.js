@@ -38,17 +38,7 @@ const signIn = () => {
 };
 
 function App() {
-  const [uid, setUid] = useState("");
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUid(user.uid);
-      }
-    });
-  }, []);
-
   const userContextValue = {
-    uid,
     signIn,
   };
 

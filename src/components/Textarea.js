@@ -11,6 +11,7 @@ const Textarea = () => {
     setCurrentTargetContent,
     setCanEditContent,
     prevContent,
+    setContents,
   } = useContext(ContentContext);
   const { signIn } = useContext(UserContext);
 
@@ -45,12 +46,16 @@ const Textarea = () => {
       uid: uid,
       created_at: created_at,
     });
-    setCurrentTargetContent({
+    const createdContent = {
       id: docRef.id,
       title: title,
       text: text,
       created_at: created_at,
+    };
+    setCurrentTargetContent({
+      ...createdContent,
     });
+    setContents((prev) => [{ ...createdContent }, ...prev]);
   };
 
   const cancelEditing = () => {
@@ -66,6 +71,15 @@ const Textarea = () => {
       created_at: content.created_at,
     });
     setCurrentTargetContent({ ...content, text: text });
+    setContents((prev) => {
+      prev.forEach((prevContent) => {
+        if (prevContent.id === content.id) {
+          prevContent.title = content.title;
+          prevContent.text = text;
+        }
+      });
+      return prev;
+    });
   };
 
   const onTitleChange = (e) => {

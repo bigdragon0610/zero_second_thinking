@@ -14,17 +14,8 @@ import { db } from "../firebase/firebase-config";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
-  const { setCurrentTargetContent, canEditContent } =
+  const { setCurrentTargetContent, canEditContent, contents, setContents } =
     useContext(ContentContext);
-
-  const [contents, setContents] = useState([
-    {
-      id: "",
-      title: "",
-      text: "",
-      created_at: "",
-    },
-  ]);
 
   useEffect(() => {
     const auth = getAuth();
@@ -66,6 +57,7 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
         {contents.map((content) => {
           return (
             <ListItemButton
+              key={content.id}
               sx={{
                 width: "200px",
                 display: "block",

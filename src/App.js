@@ -54,6 +54,14 @@ function App() {
   });
   const [canEditContent, setCanEditContent] = useState(true);
   const [prevContent, setPrevContent] = useState({ ...EMPTY_CONTENT });
+  const [contents, setContents] = useState([
+    {
+      id: "",
+      title: "",
+      text: "",
+      created_at: "",
+    },
+  ]);
   const contentContextValue = {
     EMPTY_CONTENT,
     currentTargetContent,
@@ -62,6 +70,8 @@ function App() {
     setCanEditContent,
     prevContent,
     setPrevContent,
+    contents,
+    setContents,
   };
 
   const OPENED_DRAWER_WIDTH = "200px";

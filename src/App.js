@@ -1,9 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import BrowseScreen from "./components/BrowseScreen";
 import Textarea from "./components/Textarea";
 import {
+  // eslint-disable-next-line
   Auth,
   getAuth,
+  // eslint-disable-next-line
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
@@ -38,17 +40,7 @@ const signIn = () => {
 };
 
 function App() {
-  const [uid, setUid] = useState("");
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUid(user.uid);
-      }
-    });
-  }, []);
-
   const userContextValue = {
-    uid,
     signIn,
   };
 
@@ -59,17 +51,29 @@ function App() {
     created_at: "",
   };
 
-  const [content, setContent] = useState({ ...EMPTY_CONTENT });
+  const [currentTargetContent, setCurrentTargetContent] = useState({
+    ...EMPTY_CONTENT,
+  });
   const [canEditContent, setCanEditContent] = useState(true);
   const [prevContent, setPrevContent] = useState({ ...EMPTY_CONTENT });
+  const [contents, setContents] = useState([
+    {
+      id: "",
+      title: "",
+      text: "",
+      created_at: "",
+    },
+  ]);
   const contentContextValue = {
     EMPTY_CONTENT,
-    content,
-    setContent,
+    currentTargetContent,
+    setCurrentTargetContent,
     canEditContent,
     setCanEditContent,
     prevContent,
     setPrevContent,
+    contents,
+    setContents,
   };
 
   const OPENED_DRAWER_WIDTH = "200px";

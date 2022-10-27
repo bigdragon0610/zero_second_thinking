@@ -14,7 +14,8 @@ import { db } from "../firebase/firebase-config";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
-  const { setContent, canEditContent } = useContext(ContentContext);
+  const { setCurrentTargetContent, canEditContent } =
+    useContext(ContentContext);
 
   const [contents, setContents] = useState([
     {
@@ -48,7 +49,7 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
   }, []);
 
   const showOldContent = (content) => {
-    setContent({ ...content });
+    setCurrentTargetContent({ ...content });
   };
 
   return (

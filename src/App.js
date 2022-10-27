@@ -49,13 +49,15 @@ function App() {
     created_at: "",
   };
 
-  const [content, setContent] = useState({ ...EMPTY_CONTENT });
+  const [currentTargetContent, setCurrentTargetContent] = useState({
+    ...EMPTY_CONTENT,
+  });
   const [canEditContent, setCanEditContent] = useState(true);
   const [prevContent, setPrevContent] = useState({ ...EMPTY_CONTENT });
   const contentContextValue = {
     EMPTY_CONTENT,
-    content,
-    setContent,
+    currentTargetContent,
+    setCurrentTargetContent,
     canEditContent,
     setCanEditContent,
     prevContent,

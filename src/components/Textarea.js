@@ -6,8 +6,12 @@ import { ContentContext, UserContext } from "../App";
 import { db } from "../firebase/firebase-config";
 
 const Textarea = () => {
-  const { content, setContent, setCanEditContent, prevContent } =
-    useContext(ContentContext);
+  const {
+    currentTargetContent,
+    setCurrentTargetContent,
+    setCanEditContent,
+    prevContent,
+  } = useContext(ContentContext);
   const { signIn } = useContext(UserContext);
 
   const textRef = useRef();
@@ -21,10 +25,14 @@ const Textarea = () => {
         return;
       }
       setCanEditContent(false);
-      if (!content.id) {
-        createContent(content.title, textRef.current.value, user.uid);
+      if (!currentTargetContent.id) {
+        createContent(
+          currentTargetContent.title,
+          textRef.current.value,
+          user.uid
+        );
       } else {
-        updateContent(content, textRef.current.value, user.uid);
+        updateContent(currentTargetContent, textRef.current.value, user.uid);
       }
     });
   };
@@ -37,7 +45,7 @@ const Textarea = () => {
       uid: uid,
       created_at: created_at,
     });
-    setContent({
+    setCurrentTargetContent({
       id: docRef.id,
       title: title,
       text: text,
@@ -47,7 +55,7 @@ const Textarea = () => {
 
   const cancelEditing = () => {
     setCanEditContent(false);
-    setContent({ ...prevContent });
+    setCurrentTargetContent({ ...prevContent });
   };
 
   const updateContent = async (content, text, uid) => {
@@ -57,18 +65,18 @@ const Textarea = () => {
       uid: uid,
       created_at: content.created_at,
     });
-    setContent({ ...content, text: text });
+    setCurrentTargetContent({ ...content, text: text });
   };
 
   const onTitleChange = (e) => {
-    setContent((prev) => ({ ...prev, title: e.target.value }));
+    setCurrentTargetContent((prev) => ({ ...prev, title: e.target.value }));
   };
 
   return (
     <Container component='form' maxWidth='md' sx={{ py: 3 }}>
       <Input
         sx={{ mb: 3, width: "50%" }}
-        value={content.title}
+        value={currentTargetContent.title}
         onChange={onTitleChange}
         placeholder='title'
       />
@@ -76,7 +84,7 @@ const Textarea = () => {
         multiline
         fullWidth
         inputRef={textRef}
-        defaultValue={content.text}
+        defaultValue={currentTargetContent.text}
         placeholder='text'
       />
       <Box sx={{ display: "flex", justifyContent: "end", gap: 2, mt: 2 }}>
@@ -86,7 +94,7 @@ const Textarea = () => {
         <Button
           variant='contained'
           onClick={onSubmit}
-          disabled={!content.title}
+          disabled={!currentTargetContent.title}
         >
           send
         </Button>

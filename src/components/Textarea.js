@@ -86,6 +86,12 @@ const Textarea = () => {
     setCurrentTargetContent((prev) => ({ ...prev, title: e.target.value }));
   };
 
+  const preventSubmit = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
+
   return (
     <Container component='form' maxWidth='md' sx={{ py: 3 }}>
       <Input
@@ -93,6 +99,7 @@ const Textarea = () => {
         value={currentTargetContent.title}
         onChange={onTitleChange}
         placeholder='title'
+        onKeyDown={preventSubmit}
       />
       <TextField
         multiline

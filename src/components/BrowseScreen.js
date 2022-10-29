@@ -1,4 +1,4 @@
-import { Box, Button, CardHeader, Container, Paper } from "@mui/material";
+import { Box, Button, Container, Paper } from "@mui/material";
 import { deleteDoc, doc } from "firebase/firestore";
 import { useContext } from "react";
 import { ContentContext } from "../App";
@@ -38,10 +38,19 @@ const BrowseScreen = () => {
 
   return (
     <Container maxWidth='md' sx={{ py: 3 }}>
-      <CardHeader
+      <Box
         title={currentTargetContent.title}
-        sx={{ pl: 0 }}
-      ></CardHeader>
+        sx={{
+          pl: 0,
+          my: 2,
+          fontSize: "20px",
+          whiteSpace: "nowrap",
+          overflow: "scroll",
+          maxWidth: "100%",
+        }}
+      >
+        {currentTargetContent.title}
+      </Box>
       <Paper
         variant='outlined'
         sx={{

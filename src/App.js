@@ -14,6 +14,7 @@ import { provider } from "./firebase/firebase-config";
 import Sidebar from "./components/Sidebar";
 import { AppBar, Box, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import Timer from "./components/Timer";
 
 export const UserContext = createContext();
 export const ContentContext = createContext();
@@ -100,12 +101,25 @@ function App() {
           sx={{
             height: APP_BAR_HEIGHT,
             pl: 2,
+            position: "relative",
           }}
         >
-          <Box>
+          <Box sx={{ display: "flex" }}>
             <IconButton color='inherit' onClick={toggleDrawer}>
               <MenuIcon fontSize='large' />
             </IconButton>
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <Box sx={{ ml: drawerStatuses.width }}>
+              <Timer />
+            </Box>
           </Box>
         </AppBar>
         <Sidebar

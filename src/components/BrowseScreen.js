@@ -42,7 +42,16 @@ const BrowseScreen = () => {
         title={currentTargetContent.title}
         sx={{ pl: 0 }}
       ></CardHeader>
-      <Paper variant='outlined' sx={{ whiteSpace: "pre-wrap", p: 2 }} square>
+      <Paper
+        variant='outlined'
+        sx={{
+          whiteSpace: "pre-wrap",
+          p: 2,
+          maxHeight: "75vh",
+          overflow: "scroll",
+        }}
+        square
+      >
         {currentTargetContent.text}
       </Paper>
       <Box sx={{ display: "flex", justifyContent: "end", gap: 2, mt: 2 }}>

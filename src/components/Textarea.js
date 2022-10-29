@@ -107,6 +107,7 @@ const Textarea = () => {
         inputRef={textRef}
         defaultValue={currentTargetContent.text}
         placeholder='text'
+        sx={{ maxHeight: "76vh", overflow: "scroll" }}
       />
       <Box sx={{ display: "flex", justifyContent: "end", gap: 2, mt: 2 }}>
         <Button variant='contained' onClick={cancelEditing}>

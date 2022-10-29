@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { ContentContext } from "../App";
 import { db } from "../firebase/firebase-config";
 
-const BrowseScreen = () => {
+const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
   const {
     EMPTY_CONTENT,
     currentTargetContent,
@@ -37,12 +37,15 @@ const BrowseScreen = () => {
   };
 
   return (
-    <Container maxWidth='md' sx={{ py: 3 }}>
+    <Container maxWidth='md'>
       <Box
         title={currentTargetContent.title}
         sx={{
-          pl: 0,
-          my: 2,
+          lineHeight: titleHeight,
+          mt: currentTargetContent.title ? 0 : titleHeight,
+          pt: 0.5,
+          mb: -0.5,
+          display: "block",
           fontSize: "20px",
           whiteSpace: "nowrap",
           overflow: "scroll",
@@ -55,15 +58,23 @@ const BrowseScreen = () => {
         variant='outlined'
         sx={{
           whiteSpace: "pre-wrap",
-          p: 2,
-          maxHeight: "75vh",
+          p: 1.5,
+          maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,
           overflow: "scroll",
         }}
         square
       >
         {currentTargetContent.text}
       </Paper>
-      <Box sx={{ display: "flex", justifyContent: "end", gap: 2, mt: 2 }}>
+      <Box
+        sx={{
+          height: buttonAreaHeight,
+          py: 1.5,
+          display: "flex",
+          justifyContent: "end",
+          gap: 2,
+        }}
+      >
         <Button
           variant='contained'
           onClick={deleteContent}

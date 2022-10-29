@@ -92,6 +92,8 @@ function App() {
   };
 
   const APP_BAR_HEIGHT = "52px";
+  const TITLE_HEIGHT = "60px";
+  const BUTTON_AREA_HEIGHT = "60px";
 
   return (
     <ContentContext.Provider value={contentContextValue}>
@@ -131,9 +133,22 @@ function App() {
           sx={{
             width: `calc(100% - ${drawerStatuses.width})`,
             marginLeft: "auto",
+            height: `calc(100vh - ${APP_BAR_HEIGHT})`,
           }}
         >
-          {canEditContent ? <Textarea /> : <BrowseScreen />}
+          {canEditContent ? (
+            <Textarea
+              appBarHeight={APP_BAR_HEIGHT}
+              titleHeight={TITLE_HEIGHT}
+              buttonAreaHeight={BUTTON_AREA_HEIGHT}
+            />
+          ) : (
+            <BrowseScreen
+              appBarHeight={APP_BAR_HEIGHT}
+              titleHeight={TITLE_HEIGHT}
+              buttonAreaHeight={BUTTON_AREA_HEIGHT}
+            />
+          )}
         </Box>
       </UserContext.Provider>
     </ContentContext.Provider>

@@ -5,7 +5,7 @@ import { useContext, useRef } from "react";
 import { ContentContext, UserContext } from "../App";
 import { db } from "../firebase/firebase-config";
 
-const Textarea = () => {
+const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
   const {
     currentTargetContent,
     setCurrentTargetContent,
@@ -93,23 +93,38 @@ const Textarea = () => {
   };
 
   return (
-    <Container component='form' maxWidth='md' sx={{ py: 3 }}>
-      <Input
-        sx={{ mb: 3, width: "50%" }}
-        value={currentTargetContent.title}
-        onChange={onTitleChange}
-        placeholder='title'
-        onKeyDown={preventSubmit}
-      />
+    <Container component='form' maxWidth='md'>
+      <Box sx={{ height: titleHeight, lineHeight: titleHeight }}>
+        <Input
+          sx={{
+            width: "50%",
+          }}
+          value={currentTargetContent.title}
+          onChange={onTitleChange}
+          placeholder='title'
+          onKeyDown={preventSubmit}
+        />
+      </Box>
       <TextField
         multiline
         fullWidth
         inputRef={textRef}
         defaultValue={currentTargetContent.text}
         placeholder='text'
-        sx={{ maxHeight: "76vh", overflow: "scroll" }}
+        sx={{
+          overflow: "scroll",
+          maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,
+        }}
       />
-      <Box sx={{ display: "flex", justifyContent: "end", gap: 2, mt: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          gap: 2,
+          height: buttonAreaHeight,
+          py: 1.5,
+        }}
+      >
         <Button variant='contained' onClick={cancelEditing}>
           cancel
         </Button>

@@ -86,6 +86,13 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
     setCurrentTargetContent((prev) => ({ ...prev, title: e.target.value }));
   };
 
+  const onTextChange = () => {
+    setCurrentTargetContent((prev) => ({
+      ...prev,
+      text: textRef.current.value,
+    }));
+  };
+
   const preventSubmit = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -115,6 +122,7 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
           overflow: "scroll",
           maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,
         }}
+        onBlur={onTextChange}
       />
       <Box
         sx={{

@@ -42,7 +42,7 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
         title={currentTargetContent.title}
         sx={{
           lineHeight: titleHeight,
-          mt: currentTargetContent.title ? 0 : titleHeight,
+          mt: currentTargetContent.title ? 0 : 1,
           pt: 0.5,
           mb: -0.5,
           display: "block",
@@ -57,6 +57,7 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
       <Paper
         variant='outlined'
         sx={{
+          display: currentTargetContent.text ? "block" : "none",
           whiteSpace: "pre-wrap",
           p: 1.5,
           maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,

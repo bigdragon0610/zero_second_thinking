@@ -14,8 +14,14 @@ import { db } from "../firebase/firebase-config";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
-  const { setCurrentTargetContent, canEditContent, contents, setContents } =
-    useContext(ContentContext);
+  const {
+    currentTargetContent,
+    setCurrentTargetContent,
+    canEditContent,
+    setCanEditContent,
+    contents,
+    setContents,
+  } = useContext(ContentContext);
 
   useEffect(() => {
     const auth = getAuth();
@@ -42,7 +48,12 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
 
   const showOldContent = (content) => {
     setCurrentTargetContent({ ...content });
+    setCanEditContent(false);
   };
+
+  const canShowOldContent = canEditContent
+    ? !currentTargetContent.title && !currentTargetContent.text
+    : true;
 
   return (
     <Drawer open={drawerStatuses.open} variant='persistent'>
@@ -68,7 +79,7 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
                 fontSize: "14px",
               }}
               onClick={() => showOldContent(content)}
-              disabled={canEditContent}
+              disabled={!canShowOldContent}
             >
               {content.title}
             </ListItemButton>

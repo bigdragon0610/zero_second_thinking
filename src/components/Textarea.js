@@ -133,7 +133,7 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
           onClick={onSubmit}
           disabled={!currentTargetContent.title}
         >
-          send
+          save
         </Button>
       </Box>
     </Container>

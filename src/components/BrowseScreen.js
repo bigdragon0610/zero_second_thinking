@@ -62,6 +62,7 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
           p: 1.5,
           maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,
           overflow: "scroll",
+          tabSize: 4,
         }}
         square
       >

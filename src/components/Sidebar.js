@@ -65,7 +65,13 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
         </IconButton>
       </Box>
       <Divider />
-      <List dense={true}>
+      <List
+        dense={true}
+        sx={{
+          maxHeight: `calc(100vh - ${appBarHeight})`,
+          overflow: "scroll",
+        }}
+      >
         {contents.map((content) => {
           return (
             <ListItemButton

@@ -30,7 +30,6 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
       document.addEventListener("keydown", (e) => {
         if (e.key === "b" && (e.ctrlKey || e.metaKey)) {
           e.preventDefault();
-          console.log(1);
           toggleDrawer();
         }
       });

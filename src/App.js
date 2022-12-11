@@ -95,23 +95,6 @@ function App() {
   const TITLE_HEIGHT = "60px";
   const BUTTON_AREA_HEIGHT = "60px";
 
-  document.onkeydown = (e) => {
-    if (e.key === "Tab") {
-      e.preventDefault();
-      const target = e.target;
-      const value = target.value;
-      const before = value.substring(0, target.selectionStart);
-      const after = value.substring(target.selectionEnd);
-      target.value = before + "\t" + after;
-      target.selectionStart = target.selectionEnd = before.length + 1;
-    }
-
-    if (e.key === "b" && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault();
-      toggleDrawer();
-    }
-  };
-
   return (
     <ContentContext.Provider value={contentContextValue}>
       <UserContext.Provider value={userContextValue}>

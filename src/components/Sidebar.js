@@ -12,6 +12,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "../firebase/firebase-config";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useRef } from "react";
 
 const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
   const {
@@ -23,7 +24,18 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
     setContents,
   } = useContext(ContentContext);
 
+  const ref = useRef(true);
   useEffect(() => {
+    if (ref.current) {
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "b" && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          toggleDrawer();
+        }
+      });
+      ref.current = false;
+    }
+
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
       const q = query(

@@ -99,6 +99,18 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
     }
   };
 
+  const onTabKeyDown = (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const target = e.target;
+      const value = target.value;
+      const before = value.substring(0, target.selectionStart);
+      const after = value.substring(target.selectionEnd);
+      target.value = before + "\t" + after;
+      target.selectionStart = target.selectionEnd = before.length + 1;
+    }
+  };
+
   return (
     <Container component='form' maxWidth='md'>
       <Box sx={{ height: titleHeight, lineHeight: titleHeight }}>
@@ -124,6 +136,7 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
           tabSize: 4,
         }}
         onBlur={onTextChange}
+        onKeyDown={onTabKeyDown}
       />
       <Box
         sx={{

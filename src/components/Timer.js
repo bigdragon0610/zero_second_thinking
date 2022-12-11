@@ -2,7 +2,7 @@ import { RestartAlt } from "@mui/icons-material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import { Box, IconButton, TextField } from "@mui/material";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { PatternFormat } from "react-number-format";
 import { useTimer } from "react-timer-hook";
 
@@ -53,6 +53,22 @@ const Timer = () => {
     const newExpiryTimestamp = getExpiryTimestamp(parsedInput);
     restart(newExpiryTimestamp, false);
   };
+
+  const ref = useRef(true);
+  useEffect(() => {
+    if (ref.current) {
+      document.addEventListener("keydown", (e) => {
+        if (e.shiftKey) return;
+        if (e.key === "r" && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault();
+          const newExpiryTimestamp = getExpiryTimestamp(DEFAULT_THINKING_TIME);
+          restart(newExpiryTimestamp);
+        }
+      });
+      ref.current = false;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box sx={{ display: "flex", position: "relative" }}>

@@ -11,10 +11,9 @@ import { ContentContext } from '../App'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
 import { db } from '../firebase/firebase-config'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { useRef } from 'react'
 
-const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
+const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight, loginUser }) => {
   const {
     currentTargetContent,
     setCurrentTargetContent,
@@ -35,12 +34,16 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
       })
       ref.current = false
     }
+  }, [toggleDrawer])
 
-    const auth = getAuth()
-    onAuthStateChanged(auth, async (user) => {
+  useEffect(() => {
+    const getContents = async () => {
+      if (!loginUser) {
+        return
+      }
       const q = query(
         collection(db, 'contents'),
-        where('uid', '==', user.uid),
+        where('uid', '==', loginUser.uid),
         orderBy('created_at', 'desc')
       )
       const querySnapshot = await getDocs(q)
@@ -54,9 +57,10 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
       if (fetchedContents.length) {
         setContents([...fetchedContents])
       }
-    })
+    }
+    getContents()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [loginUser])
 
   const showOldContent = (content) => {
     setCurrentTargetContent({ ...content })

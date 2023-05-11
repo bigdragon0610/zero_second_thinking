@@ -2,7 +2,7 @@ import { Box, Button, Container, Input, TextField } from '@mui/material'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
 import { useContext, useRef } from 'react'
-import { ContentContext, UserContext } from '../App'
+import { ContentContext } from '../App'
 import { db } from '../firebase/firebase-config'
 
 const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
@@ -13,7 +13,6 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
     prevContent,
     setContents,
   } = useContext(ContentContext)
-  const { signIn } = useContext(UserContext)
 
   const textRef = useRef()
 
@@ -22,7 +21,6 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         alert('ログインして下さい')
-        signIn()
         return
       }
       setCanEditContent(false)

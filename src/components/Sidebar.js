@@ -5,16 +5,15 @@ import {
   IconButton,
   List,
   ListItemButton,
-} from "@mui/material";
-import { useContext, useEffect } from "react";
-import { ContentContext } from "../App";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import { db } from "../firebase/firebase-config";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useRef } from "react";
+} from '@mui/material'
+import { useContext, useEffect } from 'react'
+import { ContentContext } from '../App'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore'
+import { db } from '../firebase/firebase-config'
+import { useRef } from 'react'
 
-const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
+const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight, loginUser }) => {
   const {
     currentTargetContent,
     setCurrentTargetContent,
@@ -22,55 +21,60 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
     setCanEditContent,
     contents,
     setContents,
-  } = useContext(ContentContext);
+  } = useContext(ContentContext)
 
-  const ref = useRef(true);
+  const ref = useRef(true)
   useEffect(() => {
     if (ref.current) {
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "b" && (e.ctrlKey || e.metaKey)) {
-          e.preventDefault();
-          toggleDrawer();
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'b' && (e.ctrlKey || e.metaKey)) {
+          e.preventDefault()
+          toggleDrawer()
         }
-      });
-      ref.current = false;
+      })
+      ref.current = false
     }
+  }, [toggleDrawer])
 
-    const auth = getAuth();
-    onAuthStateChanged(auth, async (user) => {
+  useEffect(() => {
+    const getContents = async () => {
+      if (!loginUser) {
+        return
+      }
       const q = query(
-        collection(db, "contents"),
-        where("uid", "==", user.uid),
-        orderBy("created_at", "desc")
-      );
-      const querySnapshot = await getDocs(q);
-      const fetchedContents = [];
+        collection(db, 'contents'),
+        where('uid', '==', loginUser.uid),
+        orderBy('created_at', 'desc')
+      )
+      const querySnapshot = await getDocs(q)
+      const fetchedContents = []
       querySnapshot.forEach((doc) => {
         fetchedContents.push({
           id: doc.id,
           ...doc.data(),
-        });
-      });
+        })
+      })
       if (fetchedContents.length) {
-        setContents([...fetchedContents]);
+        setContents([...fetchedContents])
       }
-    });
+    }
+    getContents()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [loginUser])
 
   const showOldContent = (content) => {
-    setCurrentTargetContent({ ...content });
-    setCanEditContent(false);
-  };
+    setCurrentTargetContent({ ...content })
+    setCanEditContent(false)
+  }
 
   const canShowOldContent = canEditContent
     ? !currentTargetContent.title && !currentTargetContent.text
-    : true;
+    : true
 
   return (
-    <Drawer open={drawerStatuses.open} variant='persistent'>
+    <Drawer open={drawerStatuses.open} variant="persistent">
       <Box
-        sx={{ height: appBarHeight, display: "flex", justifyContent: "end" }}
+        sx={{ height: appBarHeight, display: 'flex', justifyContent: 'end' }}
       >
         <IconButton onClick={toggleDrawer}>
           <ChevronLeftIcon />
@@ -81,7 +85,7 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
         dense={true}
         sx={{
           maxHeight: `calc(100vh - ${appBarHeight})`,
-          overflow: "scroll",
+          overflow: 'scroll',
         }}
       >
         {contents.map((content) => {
@@ -89,23 +93,23 @@ const Sidebar = ({ drawerStatuses, toggleDrawer, appBarHeight }) => {
             <ListItemButton
               key={content.id}
               sx={{
-                width: "200px",
-                display: "block",
-                textOverflow: "ellipsis",
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                fontSize: "14px",
+                width: '200px',
+                display: 'block',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                fontSize: '14px',
               }}
               onClick={() => showOldContent(content)}
               disabled={!canShowOldContent}
             >
               {content.title}
             </ListItemButton>
-          );
+          )
         })}
       </List>
     </Drawer>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

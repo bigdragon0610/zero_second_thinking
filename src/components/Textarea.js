@@ -1,9 +1,9 @@
-import { Box, Button, Container, Input, TextField } from "@mui/material";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { useContext, useRef } from "react";
-import { ContentContext, UserContext } from "../App";
-import { db } from "../firebase/firebase-config";
+import { Box, Button, Container, Input, TextField } from '@mui/material'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
+import { useContext, useRef } from 'react'
+import { ContentContext } from '../App'
+import { db } from '../firebase/firebase-config'
 
 const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
   const {
@@ -12,115 +12,113 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
     setCanEditContent,
     prevContent,
     setContents,
-  } = useContext(ContentContext);
-  const { signIn } = useContext(UserContext);
+  } = useContext(ContentContext)
 
-  const textRef = useRef();
+  const textRef = useRef()
 
   const onSubmit = () => {
-    const auth = getAuth();
+    const auth = getAuth()
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        alert("ログインして下さい");
-        signIn();
-        return;
+        alert('ログインして下さい')
+        return
       }
-      setCanEditContent(false);
+      setCanEditContent(false)
       if (!currentTargetContent.id) {
         createContent(
           currentTargetContent.title,
           textRef.current.value,
           user.uid
-        );
+        )
       } else {
-        updateContent(currentTargetContent, textRef.current.value, user.uid);
+        updateContent(currentTargetContent, textRef.current.value, user.uid)
       }
-    });
-  };
+    })
+  }
 
   const createContent = async (title, text, uid) => {
-    const created_at = new Date();
-    const docRef = await addDoc(collection(db, "contents"), {
+    const created_at = new Date()
+    const docRef = await addDoc(collection(db, 'contents'), {
       title: title,
       text: text,
       uid: uid,
       created_at: created_at,
-    });
+    })
     const createdContent = {
       id: docRef.id,
       title: title,
       text: text,
       created_at: created_at,
-    };
+    }
     setCurrentTargetContent({
       ...createdContent,
-    });
-    setContents((prev) => [{ ...createdContent }, ...prev]);
-  };
+    })
+    setContents((prev) => [{ ...createdContent }, ...prev])
+  }
 
   const cancelEditing = () => {
-    setCanEditContent(false);
-    setCurrentTargetContent({ ...prevContent });
-  };
+    setCanEditContent(false)
+    setCurrentTargetContent({ ...prevContent })
+  }
 
   const updateContent = async (content, text, uid) => {
-    await setDoc(doc(db, "contents", content.id), {
+    await setDoc(doc(db, 'contents', content.id), {
       title: content.title,
       text: text,
       uid: uid,
       created_at: content.created_at,
-    });
-    setCurrentTargetContent({ ...content, text: text });
+    })
+    setCurrentTargetContent({ ...content, text: text })
     setContents((prev) => {
       prev.forEach((prevContent) => {
         if (prevContent.id === content.id) {
-          prevContent.title = content.title;
-          prevContent.text = text;
+          prevContent.title = content.title
+          prevContent.text = text
         }
-      });
-      return prev;
-    });
-  };
+      })
+      return prev
+    })
+  }
 
   const onTitleChange = (e) => {
-    setCurrentTargetContent((prev) => ({ ...prev, title: e.target.value }));
-  };
+    setCurrentTargetContent((prev) => ({ ...prev, title: e.target.value }))
+  }
 
   const onTextChange = () => {
     setCurrentTargetContent((prev) => ({
       ...prev,
       text: textRef.current.value,
-    }));
-  };
+    }))
+  }
 
   const preventSubmit = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
+    if (e.key === 'Enter') {
+      e.preventDefault()
     }
-  };
+  }
 
   const onTabKeyDown = (e) => {
-    if (e.key === "Tab") {
-      e.preventDefault();
-      const target = e.target;
-      const value = target.value;
-      const before = value.substring(0, target.selectionStart);
-      const after = value.substring(target.selectionEnd);
-      target.value = before + "\t" + after;
-      target.selectionStart = target.selectionEnd = before.length + 1;
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      const target = e.target
+      const value = target.value
+      const before = value.substring(0, target.selectionStart)
+      const after = value.substring(target.selectionEnd)
+      target.value = before + '\t' + after
+      target.selectionStart = target.selectionEnd = before.length + 1
     }
-  };
+  }
 
   return (
-    <Container component='form' maxWidth='md'>
+    <Container component="form" maxWidth="md">
       <Box sx={{ height: titleHeight, lineHeight: titleHeight }}>
         <Input
           sx={{
-            width: "50%",
+            width: '50%',
           }}
           value={currentTargetContent.title}
           onChange={onTitleChange}
-          placeholder='title'
+          placeholder="title"
           onKeyDown={preventSubmit}
         />
       </Box>
@@ -129,9 +127,9 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
         fullWidth
         inputRef={textRef}
         defaultValue={currentTargetContent.text}
-        placeholder='text'
+        placeholder="text"
         sx={{
-          overflow: "scroll",
+          overflow: 'scroll',
           maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,
           tabSize: 4,
         }}
@@ -140,18 +138,18 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
       />
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "end",
+          display: 'flex',
+          justifyContent: 'end',
           gap: 2,
           height: buttonAreaHeight,
           py: 1.5,
         }}
       >
-        <Button variant='contained' onClick={cancelEditing}>
+        <Button variant="contained" onClick={cancelEditing}>
           cancel
         </Button>
         <Button
-          variant='contained'
+          variant="contained"
           onClick={onSubmit}
           disabled={!currentTargetContent.title}
         >
@@ -159,7 +157,7 @@ const Textarea = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
         </Button>
       </Box>
     </Container>
-  );
-};
+  )
+}
 
-export default Textarea;
+export default Textarea

@@ -3,6 +3,8 @@ import { deleteDoc, doc } from 'firebase/firestore'
 import { useContext } from 'react'
 import { ContentContext } from '../App'
 import { db } from '../firebase/firebase-config'
+import { isMobile } from 'react-device-detect'
+import { Editor } from '@monaco-editor/react'
 
 const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
   const {
@@ -54,20 +56,39 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
       >
         {currentTargetContent.title}
       </Box>
-      <Paper
-        variant="outlined"
-        sx={{
-          display: currentTargetContent.text ? 'block' : 'none',
-          whiteSpace: 'pre-wrap',
-          p: 1.5,
-          maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,
-          overflow: 'scroll',
-          tabSize: 4,
-        }}
-        square
-      >
-        {currentTargetContent.text}
-      </Paper>
+      {isMobile ? (
+        <Paper
+          variant="outlined"
+          sx={{
+            display: currentTargetContent.text ? 'block' : 'none',
+            whiteSpace: 'pre-wrap',
+            p: 1.5,
+            maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,
+            overflow: 'scroll',
+            tabSize: 4,
+          }}
+          square
+        >
+          {currentTargetContent.text}
+        </Paper>
+      ) : (
+        <Box
+          sx={{
+            display: currentTargetContent.text ? 'block' : 'none',
+            border: 1,
+            borderColor: 'grey.400',
+          }}
+        >
+          <Editor
+            height={`calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`}
+            defaultLanguage="markdown"
+            defaultValue={currentTargetContent.text}
+            options={{
+              readOnly: true,
+            }}
+          />
+        </Box>
+      )}
       <Box
         sx={{
           height: buttonAreaHeight,

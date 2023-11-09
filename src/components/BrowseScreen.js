@@ -82,7 +82,7 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
           <Editor
             height={`calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`}
             defaultLanguage="markdown"
-            defaultValue={currentTargetContent.text}
+            value={currentTargetContent.text}
             options={{
               readOnly: true,
             }}

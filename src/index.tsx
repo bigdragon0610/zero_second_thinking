@@ -4,8 +4,12 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { ThemeProvider } from "@mui/material/styles";
 import grayscaleTheme from "./theme/grayscaleTheme";
+import "./index.css"; // CSSファイルのインポートを追加
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const rootElement = document.getElementById("root");
+if (!rootElement) throw new Error("Failed to find the root element");
+const root = ReactDOM.createRoot(rootElement);
+
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={grayscaleTheme}>

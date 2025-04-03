@@ -1,12 +1,22 @@
-import { Box, Button, Container, Paper } from '@mui/material'
-import { deleteDoc, doc } from 'firebase/firestore'
-import { useContext } from 'react'
-import { ContentContext } from '../App'
-import { db } from '../firebase/firebase-config'
-import { isMobile } from 'react-device-detect'
-import { Editor } from '@monaco-editor/react'
+import { Box, Button, Container, Paper } from "@mui/material";
+import { deleteDoc, doc } from "firebase/firestore";
+import { useContext } from "react";
+import { ContentContext } from "../App";
+import { db } from "../firebase/firebase-config";
+import { isMobile } from "react-device-detect";
+import { Editor } from "@monaco-editor/react";
 
-const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
+interface BrowseScreenProps {
+  appBarHeight: string;
+  titleHeight: string;
+  buttonAreaHeight: string;
+}
+
+const BrowseScreen = ({
+  appBarHeight,
+  titleHeight,
+  buttonAreaHeight,
+}: BrowseScreenProps) => {
   const {
     EMPTY_CONTENT,
     currentTargetContent,
@@ -14,29 +24,29 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
     setCanEditContent,
     setPrevContent,
     setContents,
-  } = useContext(ContentContext)
+  } = useContext(ContentContext);
 
   const startEditing = () => {
-    setCanEditContent(true)
-    setPrevContent({ ...currentTargetContent })
-  }
+    setCanEditContent(true);
+    setPrevContent({ ...currentTargetContent });
+  };
 
   const createNewContent = () => {
-    setCurrentTargetContent({ ...EMPTY_CONTENT })
-    setPrevContent({ ...currentTargetContent })
-    setCanEditContent(true)
-  }
+    setCurrentTargetContent({ ...EMPTY_CONTENT });
+    setPrevContent({ ...currentTargetContent });
+    setCanEditContent(true);
+  };
 
   const deleteContent = async () => {
-    if (!window.confirm('削除しますか？')) {
-      return
+    if (!window.confirm("削除しますか？")) {
+      return;
     }
-    await deleteDoc(doc(db, 'contents', currentTargetContent.id))
-    setCurrentTargetContent({ ...EMPTY_CONTENT })
+    await deleteDoc(doc(db, "contents", currentTargetContent.id));
+    setCurrentTargetContent({ ...EMPTY_CONTENT });
     setContents((prev) =>
       prev.filter((prev) => prev.id !== currentTargetContent.id)
-    )
-  }
+    );
+  };
 
   return (
     <Container maxWidth="md">
@@ -47,11 +57,11 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
           mt: currentTargetContent.title ? 0 : 1,
           pt: 0.5,
           mb: -0.5,
-          display: 'block',
-          fontSize: '20px',
-          whiteSpace: 'nowrap',
-          overflow: 'scroll',
-          maxWidth: '100%',
+          display: "block",
+          fontSize: "20px",
+          whiteSpace: "nowrap",
+          overflow: "scroll",
+          maxWidth: "100%",
         }}
       >
         {currentTargetContent.title}
@@ -60,11 +70,11 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
         <Paper
           variant="outlined"
           sx={{
-            display: currentTargetContent.text ? 'block' : 'none',
-            whiteSpace: 'pre-wrap',
+            display: currentTargetContent.text ? "block" : "none",
+            whiteSpace: "pre-wrap",
             p: 1.5,
             maxHeight: `calc(100vh - ${appBarHeight} - ${titleHeight} - ${buttonAreaHeight})`,
-            overflow: 'scroll',
+            overflow: "scroll",
             tabSize: 4,
           }}
           square
@@ -74,9 +84,9 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
       ) : (
         <Box
           sx={{
-            display: currentTargetContent.text ? 'block' : 'none',
+            display: currentTargetContent.text ? "block" : "none",
             border: 1,
-            borderColor: 'grey.400',
+            borderColor: "grey.400",
           }}
         >
           <Editor
@@ -93,8 +103,8 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
         sx={{
           height: buttonAreaHeight,
           py: 1.5,
-          display: 'flex',
-          justifyContent: 'end',
+          display: "flex",
+          justifyContent: "end",
           gap: 2,
         }}
       >
@@ -117,7 +127,7 @@ const BrowseScreen = ({ appBarHeight, titleHeight, buttonAreaHeight }) => {
         </Button>
       </Box>
     </Container>
-  )
-}
+  );
+};
 
-export default BrowseScreen
+export default BrowseScreen;

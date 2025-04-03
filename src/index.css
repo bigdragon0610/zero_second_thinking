@@ -1,0 +1,24 @@
+/* ...existing code... */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f7f7f7; /* 純粋なグレーの背景色 */
+  color: #333333; /* 黒みの強いテキストカラー */
+}
+
+a {
+  color: #808080; /* ニュートラルなリンクカラー */
+  text-decoration: none;
+}
+
+a:hover {
+  color: #a0a0a0; /* ニュートラルなホバーカラー */
+  text-decoration: underline;
+}
+
+/* ...existing code... */
